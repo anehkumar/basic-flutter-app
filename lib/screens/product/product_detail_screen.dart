@@ -11,7 +11,17 @@ class ProductDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Product Details')),
+      appBar: AppBar(
+        title: Builder(
+          builder: (context) {
+            final state = context.watch<ProductDetailCubit>().state;
+            if (state is ProductDetailLoaded) {
+              return Text(state.product.title);
+            }
+            return const Text('Product Details');
+          },
+        ),
+      ),
       body: BlocProvider(
         create: (context) => ProductDetailCubit()..fetchProduct(productId),
         child: BlocBuilder<ProductDetailCubit, ProductDetailState>(
